@@ -1,0 +1,48 @@
+# build.yaml
+targets:
+  $default:
+    builders:
+      # Freezed Configuration
+      freezed:
+        generate_for:
+          include:
+            - lib/domain/entities/**.dart
+            - lib/domain/core/failures/**.dart
+            - lib/data/models/**.dart
+            - lib/presentation/providers/**.dart
+        options:
+          copy_with: true
+          map: true
+          when: true
+          union_key: type
+          union_value_case: snake
+
+      # JSON Serializable Configuration
+      json_serializable:
+        options:
+          explicit_to_json: true
+          include_if_null: false
+          field_rename: snake
+          create_to_json: true
+          create_factory: true
+        generate_for:
+          include:
+            - lib/data/models/**.dart
+
+      # Injectable Configuration
+      injectable_generator:injectable_builder:
+        options:
+          auto_register: true
+          class_name_pattern: "Service$|Repository$|Bloc$|Notifier$|Controller$"
+          file_name_pattern: "_service$|_repository$|_bloc$|_notifier$|_controller$"
+      injectable_generator:injectable_config_builder:
+        options:
+          force_auto_register: true
+        generate_for:
+          - lib/core/di/injection.dart
+
+      # Hive Generator Configuration
+      hive_generator:
+        generate_for:
+          include:
+            - lib/data/models/**.dart
